@@ -39,24 +39,26 @@ Mercure is a tool for security managers who want to teach their colleagues about
 
 ## Available configuration
 
-| Environment variable name | Status   | Description                                 | Value example                      |
-|---------------------------|----------|---------------------------------------------|------------------------------------|
-| SECRET_KEY                | Required | Django secret key                           | Random string                      |
-| URL                       | Required | Mercure URL                                 | https://mercure.example.com        |
-| EMAIL_HOST                | Required | SMTP server                                 | mail.example.com                   |
-| EMAIL_PORT                | Optional | SMTP port                                   | 587                                |
-| EMAIL_HOST_USER           | Optional | SMTP user                                   | phishing@example.com               |
-| EMAIL_HOST_PASSWORD       | Optional | SMTP password                               | P@SSWORD                           |
-| REDIS_HOST                | Optional | Redis server                                | 127.0.0.1                          |
-| REDIS_PORT                | Optional | Redis port                                  | 6379                               |
-| DEBUG                     | Optional | Run on debug mode                           | True                               |
-| SENTRY_DSN                | Optional | Send debug info to sentry.io                | https://23xxx:38xxx@sentry.io/1234 |
-| AXES_LOCK_OUT_AT_FAILURE  | Optional | Ban on forcebrute login                     | True                               |
+| Environment variable name | Status   | Description                              | Value example                      |
+| ------------------------- | -------- | ---------------------------------------- | ---------------------------------- |
+| SECRET_KEY                | Required | Django secret key                        | Random string                      |
+| URL                       | Required | Mercure URL                              | https://mercure.example.com        |
+| EMAIL_HOST                | Required | SMTP server                              | mail.example.com                   |
+| EMAIL_PORT                | Optional | SMTP port                                | 587                                |
+| EMAIL_HOST_USER           | Optional | SMTP user                                | phishing@example.com               |
+| EMAIL_HOST_PASSWORD       | Optional | SMTP password                            | P@SSWORD                           |
+| REDIS_HOST                | Optional | Redis server                             | 127.0.0.1                          |
+| REDIS_PORT                | Optional | Redis port                               | 6379                               |
+| DEBUG                     | Optional | Run on debug mode                        | True                               |
+| SENTRY_DSN                | Optional | Send debug info to sentry.io             | https://23xxx:38xxx@sentry.io/1234 |
+| AXES_LOCK_OUT_AT_FAILURE  | Optional | Ban on forcebrute login                  | True                               |
 | AXES_COOLOFF_TIME         | Optional | Ban duration on forcebrute login (in hours) | 0.8333                             |
-| DONT_SERVES_STATIC_FILE   | Optional | Don't serve static files with django        | True                               |
+| DONT_SERVES_STATIC_FILE   | Optional | Don't serve static files with django     | True                               |
 
 
 ## Sample deployment
+
+Create a file, call it "docker-compose.yml" and copy the following code 
 
 ```yaml
 version: '2'
@@ -117,9 +119,14 @@ docker-compose exec front python manage.py createsuperuser
 ## Deployment
 
 At first remember that Mercure is only compatible with Python 3. When using pip and manage.py ensure that ```pip -V``` and ```python -V``` are Python3 versions. You can use *virtualenv* to define python 3 as the default version for a project without changing system wide version
+You need also to install docker and redis database
+
 
 ```
-git clone git@github.com:synhack/mercure.git && cd mercure
+# Start docker.service
+sudo systemctl start docker.service
+
+git clone https://github.com/synhack/mercure.git && cd mercure
 pip install -r requirements.txt
 ./manage.py makemigrations
 ./manage.py migrate
@@ -127,6 +134,7 @@ pip install -r requirements.txt
 ./manage.py createsuperuser
 
 # In three different tabs
+docker run --name redis -d -p 6379:6379 redis
 ./manage.py runserver
 ./manage.py rqworker default
 ./manage.py rqscheduler
@@ -168,6 +176,8 @@ Targets, Email Templates and Campaign are the minimum required to run a basic ph
    You need to fill the mercure name, select the email template and the target group.
    You can select the SMTP credentials, SSL using or URL minimazing
 
+   Note : When filling the smtp form, don't forget to specify the smtp hostname and the port 
+   For example :  smtp.gmail.com:587
 
 4. Optional, add landing page
 
@@ -200,10 +210,10 @@ Targets, Email Templates and Campaign are the minimum required to run a basic ph
 3. Make comments and clean commits to the repository
 
 4. Run unnittests
-	```
-    docker run --name redis -d -p 6379:6379 redis
-	python manage.py test --exclude-tag selenium
-	```
+  ```
+  docker run --name redis -d -p 6379:6379 redisdocker run --name redis -d -p 6379:6379 redis
+  python manage.py test --exclude-tag selenium
+  ```
 
 5. Perform a pull request
 
