@@ -176,7 +176,8 @@ Targets, Email Templates and Campaign are the minimum required to run a basic ph
    You need to fill the mercure name, select the email template and the target group.
    You can select the SMTP credentials, SSL using or URL minimazing
 
-   Note : When filling the smtp form, don't forget to specify the smtp hostname and the port 
+   Note : When filling the smtp form, don't forget to specify the smtp hostname and the port.
+   
    For example :  smtp.gmail.com:587
 
 4. Optional, add landing page
