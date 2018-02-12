@@ -212,7 +212,7 @@ Targets, Email Templates and Campaign are the minimum required to run a basic ph
 
 4. Run unnittests
   ```
-  docker run --name redis -d -p 6379:6379 redisdocker run --name redis -d -p 6379:6379 redis
+  docker run --name redis -d -p 6379:6379 redis
   python manage.py test --exclude-tag selenium
   ```
 
