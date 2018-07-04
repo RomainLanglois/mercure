@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 
 import os
 
+from django.conf import global_settings
 from unipath import Path
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = Path(__file__).ancestor(3)
@@ -34,9 +35,7 @@ INSTALLED_APPS = [
 
     # contrib app
     'bootstrapform',
-    'datetimewidget',
     'rest_framework',
-    'django_rq',
     'sphinx',
 
     # django
@@ -97,7 +96,7 @@ WSGI_APPLICATION = 'mercure.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
-DATABASES_DIR = BASE_DIR.child('data')
+DATABASES_DIR = BASE_DIR.child('database')
 if not os.path.exists(DATABASES_DIR):
     os.mkdir(DATABASES_DIR)
 DATABASES = {
@@ -157,6 +156,9 @@ MEDIA_URL = '/media/'
 AUTH_USER_MODEL = 'phishing.User'
 LOGIN_REDIRECT_URL = '/'
 
+# Init cache setting (for prod add setting)
+CACHES = global_settings.CACHES
+
 # api
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
@@ -164,17 +166,4 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
     ],
-}
-
-CACHES = {
-    'default': {
-        'BACKEND': 'redis_cache.cache.RedisCache',
-        'LOCATION': os.environ.get('REDIS_PORT', 'tcp://localhost:6379'),
-    },
-}
-
-RQ_QUEUES = {
-    'default': {
-        'URL': os.environ.get('REDIS_PORT', 'tcp://localhost:6379'),
-    },
 }
